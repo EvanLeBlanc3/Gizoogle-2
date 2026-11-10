@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gizoogle 2">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+<title>Gizoogle 2 — Tha Tranzizzle Machizzle</title>
+<style>
+  :root{
+    --bg:#ffffff; --fg:#202124; --muted:#5f6368; --card:#f8f9fa; --line:#dadce0;
+    --b:#4285F4; --r:#EA4335; --y:#FBBC05; --g:#34A853; --accent:#8e44ad;
+  }
+  body.dark{ --bg:#16161a; --fg:#e8eaed; --muted:#9aa0a6; --card:#22232a; --line:#3c4043; }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,Helvetica,sans-serif;transition:background .3s,color .3s}
+  body{padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 24px)}
+  .top{display:flex;justify-content:flex-end;gap:8px;max-width:900px;margin:0 auto}
+  .pill{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer}
+  .pill:hover{filter:brightness(.97)}
+  main{max-width:900px;margin:0 auto;text-align:center}
+  h1.logo{font-family:"Product Sans","Century Gothic",Arial,sans-serif;font-size:clamp(52px,12vw,96px);margin:24px 0 0;letter-spacing:-2px;user-select:none;cursor:pointer;display:inline-block}
+  h1.logo span{display:inline-block;transition:transform .25s}
+  h1.logo:hover span{animation:wobble .6s ease-in-out}
+  h1.logo span:nth-child(2){animation-delay:.05s}h1.logo span:nth-child(3){animation-delay:.1s}
+  h1.logo span:nth-child(4){animation-delay:.15s}h1.logo span:nth-child(5){animation-delay:.2s}
+  h1.logo span:nth-child(6){animation-delay:.25s}h1.logo span:nth-child(7){animation-delay:.3s}
+  h1.logo span:nth-child(8){animation-delay:.35s}
+  @keyframes wobble{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-10px) rotate(-8deg)}60%{transform:translateY(3px) rotate(6deg)}}
+  .two{font-size:.45em;vertical-align:super;background:linear-gradient(135deg,var(--accent),var(--r));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;margin-left:4px}
+  .tag{color:var(--muted);margin:4px 0 22px;font-style:italic}
+  .modes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+  .mode{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:9px 14px;cursor:pointer;font-size:14px;transition:all .2s}
+  .mode.active{background:var(--b);color:#fff;border-color:var(--b);transform:scale(1.05);box-shadow:0 3px 10px rgba(66,133,244,.35)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
+  @media (max-width:700px){.grid{grid-template-columns:1fr}}
+  .box{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:12px;display:flex;flex-direction:column;min-height:240px;box-shadow:0 1px 6px rgba(32,33,36,.08)}
+  .box label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+  textarea{flex:1;border:none;outline:none;resize:none;background:transparent;color:var(--fg);font-size:17px;line-height:1.5;font-family:inherit;min-height:180px}
+  #out{flex:1;font-size:17px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;min-height:180px}
+  #out .hit{background:linear-gradient(transparent 60%, rgba(251,188,5,.45) 60%);border-radius:3px;transition:background .3s}
+  #out .ad{color:var(--accent);font-weight:bold}
+  #out:empty::before{content:"Yo translation gonna show up right hurr…";color:var(--muted);font-style:italic}
+  .tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .tbtn{border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;padding:6px 8px;border-radius:8px}
+  .tbtn:hover{background:rgba(128,128,128,.15);color:var(--fg)}
+  .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;margin:18px 0}
+  .btn{background:var(--card);border:1px solid var(--line);color:var(--fg);padding:11px 18px;border-radius:6px;font-size:15px;cursor:pointer}
+  .btn:hover{border-color:var(--muted);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+  .btn.primary{background:var(--b);color:#fff;border-color:var(--b)}
+  .slider{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+  input[type=range]{accent-color:var(--r);width:150px}
+  #heat{font-weight:bold;color:var(--r);min-width:90px;text-align:left}
+  .stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-size:13px;color:var(--muted)}
+  .stat b{color:var(--fg);font-size:18px;display:block}
+  details{text-align:left;border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-top:12px;background:var(--card)}
+  summary{cursor:pointer;font-weight:bold}
+  .hist-item{padding:8px 0;border-bottom:1px dashed var(--line);cursor:pointer;font-size:14px}
+  .hist-item:last-child{border-bottom:none}
+  .hist-item small{color:var(--muted);display:block}
+  .dict{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;font-size:13px;margin-top:10px;max-height:260px;overflow:auto}
+  .dict div{background:var(--bg);border-radius:8px;padding:6px 8px}
+  .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%) translateY(120px);background:#202124;color:#fff;padding:12px 20px;border-radius:999px;transition:transform .3s;z-index:9;font-size:14px}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  footer{color:var(--muted);font-size:12px;margin-top:28px}
+  .shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px) rotate(-1deg)}75%{transform:translateX(6px) rotate(1deg)}}
+
+  /* ===== iPhone polish ===== */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{padding-left:calc(env(safe-area-inset-left) + 16px);padding-right:calc(env(safe-area-inset-right) + 16px);-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+  button,.mode,.pill,.btn,.tbtn{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+  textarea{font-size:17px}
+  /* ===== No-rotate lock: landscape phones get told to flip back ===== */
+  #rotateLock{display:none;position:fixed;inset:0;z-index:99;background:var(--bg);color:var(--fg);flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:calc(env(safe-area-inset-top) + 20px) calc(env(safe-area-inset-right) + 20px) calc(env(safe-area-inset-bottom) + 20px) calc(env(safe-area-inset-left) + 20px)}
+  #rotateLock .phone{font-size:64px;animation:tilt 1.6s ease-in-out infinite}
+  #rotateLock b{font-size:22px}
+  #rotateLock span{color:var(--muted);font-size:15px}
+  @keyframes tilt{0%,20%{transform:rotate(-90deg)}60%,100%{transform:rotate(0)}}
+  @media (orientation:landscape) and (max-height:540px){
+    #rotateLock{display:flex}
+    body>.top,body>main,body>.toast{display:none!important}
+    html,body{overflow:hidden}
+  }
+</style>
+</head>
+<body>
+<div id="rotateLock" aria-hidden="true">
+  <div class="phone">📱</div>
+  <b>Whoa there, playa — flip it back!</b>
+  <span>Gizoogle 2 only rolls in portrait mizzle, fo' shizzle.</span>
+</div>
+<div class="top">
+  <button class="pill" id="darkBtn" title="Toggle dark mode">🌙 Dark Mizzle</button>
+</div>
+
+<main>
+  <h1 class="logo" id="logo" title="Click me, I dare ya">
+    <span style="color:var(--b)">G</span><span style="color:var(--r)">i</span><span style="color:var(--y)">z</span><span style="color:var(--b)">o</span><span style="color:var(--g)">o</span><span style="color:var(--r)">g</span><span style="color:var(--b)">l</span><span style="color:var(--y)">e</span><span class="two">2</span>
+  </h1>
+  <div class="tag" id="tagline">Tha Tranzizzle Machizzle — now wit' 200% mo' nonsense</div>
+
+  <div class="modes" id="modes"></div>
+
+  <div class="grid">
+    <div class="box">
+      <label><span>Boring Human Words</span><span id="inCount">0 words</span></label>
+      <textarea id="in" placeholder="Type somethin' normal here… like 'I need to reset my password before the meeting.'"></textarea>
+      <div class="tools">
+        <button class="tbtn" id="sampleBtn">🎲 Random sample</button>
+        <button class="tbtn" id="clearBtn">🧹 Clear</button>
+        <button class="tbtn" id="pasteBtn">📋 Paste</button>
+      </div>
+    </div>
+    <div class="box">
+      <label><span id="outLabel">Tranzizzled</span><span id="outCount">0 changes</span></label>
+      <div id="out" aria-live="polite"></div>
+      <div class="tools">
+        <button class="tbtn" id="copyBtn">📄 Copy</button>
+        <button class="tbtn" id="speakBtn">🔊 Read it out loud</button>
+        <button class="tbtn" id="shareBtn">📤 Share</button>
+        <button class="tbtn" id="saveBtn">⭐ Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn primary" id="goBtn">Tranzizzle It</button>
+    <button class="btn" id="luckyBtn">I'm Feelin' Shizzle</button>
+    <button class="btn" id="rerollBtn">🔁 Reroll</button>
+    <div class="slider">
+      Intensity
+      <input type="range" id="intensity" min="1" max="4" value="2">
+      <span id="heat">Spicy 🌶️</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="sWords">0</b>words translated</div>
+    <div class="stat"><b id="sPct">0%</b>nonsense ratio</div>
+    <div class="stat"><b id="sTotal">0</b>lifetime tranzizzles</div>
+  </div>
+
+  <details id="histBox">
+    <summary>⭐ Saved Tranzizzlez</summary>
+    <div id="hist"></div>
+  </details>
+  <details>
+    <summary>📖 Tha Dictionizzle (current mode)</summary>
+    <div class="dict" id="dict"></div>
+  </details>
+
+  <footer>Gizoogle 2 · Works offline · Translations are 100% guaranteed to be 0% professional · Not affiliated with any actual search engines, fo' shizzle.</footer>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= MODES ================= */
+const MODES = {
+  izzle: {
+    name:"🎤 Classic Izzle", label:"Tranzizzled", speechRate:0.95,
+    dict:{
+      "the":"tha","for":"fo'","four":"fo'","sure":"shizzle","yes":"fo' shizzle","no":"naw","you":"yo","your":"yo'","you're":"you be","are":"is","is":"be","am":"be","my":"mah","i'm":"I be","with":"wit'","what":"whut","that":"dat","this":"dis","them":"dem","they":"dey","there":"thurr","here":"hurr","where":"wurr","man":"dawg","friend":"homie","friends":"homies","dude":"dawg","guy":"playa","guys":"playaz","people":"peeps","house":"crib","home":"crib","car":"whip","cars":"whips","money":"cheddar","dollars":"bones","cash":"scrilla","food":"grub","eat":"grub on","good":"tight","great":"off tha hook","awesome":"straight fire","cool":"fly","bad":"wack","very":"mad","really":"straight up","hello":"wassup","hi":"yo","hey":"ayo","goodbye":"peace out","bye":"lata","thanks":"much love","thank":"big ups","computer":"compizzle","password":"passizzle","email":"e-mizzle","phone":"cell-izzle","meeting":"meetizzle","work":"hustle","job":"gig","boss":"big dawg","going":"goin'","something":"somethin'","nothing":"nothin'","because":"cuz","about":"'bout","before":"befo'","more":"mo'","little":"lil'","police":"5-0","party":"shindig","drink":"drizzle","shoes":"kicks","clothes":"threads","understand":"feel","know":"knizzle","yeah":"fo' sho","okay":"aight","ok":"aight","all right":"aight","alright":"aight","think":"be thinkin'","want":"be wantin'","need":"gotta git","help":"hook up","problem":"drama","error":"bizzle","ticket":"tizzle","issue":"drama","fix":"fizzle up","reset":"reset tha mizzle","coffee":"bean juice","boring":"mad wack","fast":"quick-like","later":"lata","tomorrow":"tomorrizzle","today":"todizzle","night":"nizzle","dog":"dizzle","cat":"kizzle","love":"luv","said":"spit","says":"be spittin'","be":"be","please":"pleazy","sorry":"my bad","of":"of","and":"an'","to":"ta"
+    },
+    adlibs:["fo' shizzle.","ya dig?","know what I'm sayin'?","fo' real.","straight up.","yeahhh.","biaaatch… I mean, sir.","off tha chain.","holla!","word.","dizzle fo' rizzle.","no cap.","believe dat."],
+    transform:(w,rng,lvl)=>{
+      const lw=w.toLowerCase();
+      if(/ing$/.test(lw)&&lw.length>4&&rng()<0.9) return w.slice(0,-1)+"'";
+      if(lw.length>=4 && rng()< [0,0.12,0.25,0.45,0.75][lvl]){
+        const m=lw.match(/^([^aeiouy]*)([aeiouy]?)/);
+        let onset=m[1]||"";
+        let res=(onset||"")+"izzle";
+        if(lw.endsWith("s")&&!lw.endsWith("ss")) res+="s";
+        return res;
+      }
+      return null;
+    }
+  },
+  pirate:{
+    name:"🏴‍☠️ Pirate", label:"Piratified", speechRate:0.9,
+    dict:{"hello":"ahoy","hi":"ahoy","hey":"avast","my":"me","you":"ye","your":"yer","you're":"ye be","is":"be","are":"be","am":"be","the":"th'","friend":"matey","friends":"hearties","man":"scallywag","guy":"bilge rat","boss":"cap'n","manager":"cap'n","money":"doubloons","cash":"pieces o' eight","dollars":"doubloons","house":"ship","home":"port","car":"vessel","yes":"aye","no":"nay","food":"grub","drink":"grog","coffee":"bilge water","stop":"belay","where":"whar","computer":"cursed magic box","password":"secret parley","email":"message in a bottle","meeting":"council o' th' crew","work":"swabbin'","job":"duty aboard","problem":"kraken","error":"barnacle","ticket":"treasure map","going":"sailin'","of":"o'","for":"fer","to":"t'","and":"an'","think":"reckon","old":"barnacle-covered","bathroom":"head","quickly":"smartly","fast":"smartly","okay":"aye aye","thanks":"thankee","sorry":"blimey","wow":"shiver me timbers","phone":"spyglass","help":"lend a hook","fix":"patch th' hull","reset":"scuttle an' raise"},
+    adlibs:["Arrr!","Yo ho ho!","Shiver me timbers!","Blow me down!","…or walk th' plank!","Savvy?","Har har!","Batten down th' hatches!"],
+    transform:(w,rng,lvl)=>{
+      const lw=w.toLowerCase();
+      if(/ing$/.test(lw)&&lw.length>4) return w.slice(0,-1)+"'";
+      if(lvl>=3 && /r/.test(lw) && rng()<0.3) return w.replace(/r/i,m=>m+"rr");
+      return null;
+    }
+  },
+  olde:{
+    name:"📜 Ye Olde", label:"Bard-ified", speechRate:0.85,
+    dict:{"you":"thou","your":"thy","yours":"thine","you're":"thou art","are":"art","is":"doth be","hello":"good morrow","hi":"hail","hey":"prithee","goodbye":"fare thee well","bye":"adieu","yes":"aye","no":"nay","friend":"good sir","friends":"kinsmen","man":"gentle knave","boss":"liege","manager":"my liege","money":"coin","car":"noble steed","house":"castle","computer":"enchanted scrying tablet","password":"secret incantation","email":"scroll","meeting":"royal council","work":"toil","job":"vocation","problem":"vexation","error":"foul curse","ticket":"petition","phone":"talking bone","coffee":"dark elixir","food":"victuals","drink":"mead","think":"bethinks","maybe":"perchance","why":"wherefore","before":"ere","here":"hither","there":"yonder","often":"oft","soon":"anon","does":"doth","has":"hath","have":"hast","very":"most","really":"verily","great":"most wondrous","bad":"most foul","stupid":"dull-brained","please":"prithee","thanks":"gramercy","okay":"'tis well","help":"succor","fix":"mend","reset":"reforge"},
+    adlibs:["Huzzah!","Forsooth!","Zounds!","By my troth!","Hark!","Prithee, attend.","Methinks 'tis so.","Odds bodkins!"],
+    transform:(w,rng,lvl)=>{
+      const lw=w.toLowerCase();
+      if(lvl>=3 && lw.length>4 && /s$/.test(lw)===false && /[a-z]{3}ed$/.test(lw) && rng()<0.5) return w.slice(0,-2)+"'d";
+      if(lvl>=2 && lw.endsWith("y")&&lw.length>4 && rng()<0.2) return w+"e";
+      return null;
+    }
+  },
+  corp:{
+    name:"💼 Corporate Speak", label:"Synergized", speechRate:1.05,
+    dict:{"talk":"circle back","discuss":"socialize","meeting":"alignment touchpoint","work":"deliverables","job":"value stream","problem":"opportunity","issue":"learning","error":"unplanned feature","fix":"remediate","help":"empower","idea":"thought leadership","ideas":"learnings","use":"leverage","think":"ideate","plan":"strategic roadmap","later":"in the next sprint","tomorrow":"EOD tomorrow-ish","today":"by EOD","now":"in real time","busy":"at capacity","tired":"low bandwidth","time":"bandwidth","team":"tiger team","people":"human capital","friend":"stakeholder","friends":"stakeholders","boss":"senior leadership","email":"async touchpoint","computer":"productivity endpoint","password":"credential artifact","ticket":"service journey","reset":"re-baseline","change":"pivot","try":"pilot","good":"best-in-class","great":"world-class","bad":"suboptimal","yes":"let's take that offline but yes","no":"let me push back on that","okay":"aligned","ok":"aligned","agree":"double-click on that","understand":"have visibility into","coffee":"productivity fuel","lunch":"working lunch","hello":"hope this finds you well","hi":"quick sync","thanks":"thanks in advance","sorry":"per my last email","money":"budget runway","small":"right-sized","big":"enterprise-grade","fast":"agile","slow":"phased","quit":"explore other opportunities","fired":"rightsized","new":"next-gen","important":"mission-critical","everyone":"all hands"},
+    adlibs:["Let's take this offline.","Synergy!","Let's put a pin in it.","Moving the needle.","Per my last email.","Low-hanging fruit!","It is what it is.","Circling back.","Win-win."],
+    transform:()=>null
+  },
+  cowboy:{
+    name:"🤠 Cowboy", label:"Yeehaw'd", speechRate:0.9,
+    dict:{"hello":"howdy","hi":"howdy","hey":"well butter my biscuit","you":"y'all","you all":"all y'all","your":"yer","friend":"pardner","friends":"pardners","man":"cowpoke","boss":"trail boss","going to":"fixin' to","about to":"fixin' to","car":"horse","truck":"trusty steed","house":"ranch","home":"homestead","money":"gold","food":"vittles","coffee":"cowboy brew","drink":"sarsaparilla","computer":"electric tumbleweed","password":"secret brand","email":"telegram","meeting":"hoedown","work":"wranglin'","job":"cattle drive","problem":"rattlesnake","error":"dust storm","ticket":"wanted poster","fast":"faster'n a jackrabbit","very":"mighty","really":"plumb","isn't":"ain't","aren't":"ain't","not":"nary","goodbye":"happy trails","bye":"see ya down the trail","thanks":"much obliged","yes":"yup","no":"nope","okay":"reckon so","think":"reckon","help":"lend a lasso","fix":"wrangle","reset":"round up again","angry":"madder'n a wet hen"},
+    adlibs:["Yeehaw!","Giddy up!","Well I'll be.","Hot dang!","Dagnabbit!","Ain't that a hoot.","Rootin' tootin'!"],
+    transform:(w,rng,lvl)=>{
+      const lw=w.toLowerCase();
+      if(/ing$/.test(lw)&&lw.length>4) return w.slice(0,-1)+"'";
+      return null;
+    }
+  },
+  uwu:{
+    name:"🐾 UwU", label:"UwU-ified", speechRate:1.15,
+    dict:{"love":"wuv","hello":"hewwo","hi":"hai","you":"chu","your":"ur","little":"widdle","what":"wut","the":"da","this":"dis","that":"dat","no":"nyo","now":"nyow","cute":"kawaii","thanks":"tankies","sorry":"sowwy","computer":"compootew","password":"secwet wowd","error":"oopsie woopsie","problem":"big sad","ticket":"tickie","meeting":"meetie","boss":"senpai"},
+    adlibs:["UwU","OwO","*nuzzles*",">w<","^w^","*blushes*","rawr x3","(｡♥‿♥｡)"],
+    transform:(w,rng,lvl)=>{
+      let r=w.replace(/[rl]/g,"w").replace(/[RL]/g,"W");
+      if(lvl>=2) r=r.replace(/n([aeiou])/g,"ny$1").replace(/N([aeiouAEIOU])/g,"Ny$1");
+      if(lvl>=4 && w.length>2 && rng()<0.15) r=r[0]+"-"+r;
+      return r!==w?r:null;
+    }
+  }
+};
+
+/* ================= ENGINE ================= */
+const LEVELS=[null,{n:"Mild 🙂",ad:0.12},{n:"Spicy 🌶️",ad:0.3},{n:"Extra Spicy 🔥",ad:0.55},{n:"UNHINGED 🤪",ad:0.9}];
+let mode=localStorage.getItem("gz2_mode")||"izzle";
+let seed=1;
+
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function rngFrom(n){let t=n+0x6D2B79F5;return()=>{t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+
+function matchCase(src,out){
+  if(src===src.toUpperCase()&&src.length>1) return out.toUpperCase();
+  if(src[0]===src[0].toUpperCase()&&src[0]!==src[0].toLowerCase()) return out[0].toUpperCase()+out.slice(1);
+  return out;
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function translate(text){
+  const M=MODES[mode], lvl=+intensity.value;
+  // multi-word phrases first
+  let t=text;
+  Object.keys(M.dict).filter(k=>k.includes(" ")).forEach(k=>{
+    t=t.replace(new RegExp("\\b"+k+"\\b","gi"),m=>"\u0001"+matchCase(m,M.dict[k])+"\u0002");
+  });
+  const parts=t.split(/(\u0001[^\u0002]*\u0002|[A-Za-z']+)/);
+  let html="",plain="",changed=0,words=0,idx=0;
+  for(const p of parts){
+    if(!p) continue;
+    if(p[0]==="\u0001"){const v=p.slice(1,-1);html+=`<span class="hit">${esc(v)}</span>`;plain+=v;changed++;words++;continue;}
+    if(/^[A-Za-z']+$/.test(p)){
+      words++;idx++;
+      const rng=rngFrom(hash(p.toLowerCase())+idx*31+seed*977);
+      const lw=p.toLowerCase();
+      let out=null;
+      if(M.dict[lw]!==undefined && (lvl>=2 || rng()<0.7)) out=matchCase(p,M.dict[lw]);
+      else out=M.transform(p,rng,lvl);
+      if(out && out!==p){html+=`<span class="hit">${esc(out)}</span>`;plain+=out;changed++;}
+      else{html+=esc(p);plain+=p;}
+      continue;
+    }
+    // punctuation / whitespace: sprinkle ad-libs after sentence ends
+    let chunk=p;
+    const rng=rngFrom(hash(p)+idx*131+seed*313);
+    const htmlChunk=esc(chunk).replace(/([.!?]+)(\s|$)/g,(m,punc,sp)=>{
+      if(rng()<LEVELS[lvl].ad){
+        const a=M.adlibs[Math.floor(rng()*M.adlibs.length)];
+        plain+="";return `${punc} <span class="ad">${esc(a)}</span>${sp}`;
+      }
+      return m;
+    });
+    html+=htmlChunk;
+    plain+=htmlChunk.replace(/<[^>]+>/g,"").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"');
+  }
+  // trailing ad-lib if text doesn't end with punctuation
+  if(text.trim() && !/[.!?]\s*$/.test(text) && lvl>=2){
+    const rng=rngFrom(hash(text)+seed);
+    if(rng()<LEVELS[lvl].ad+0.2){const a=M.adlibs[Math.floor(rng()*M.adlibs.length)];html+=` <span class="ad">${esc(a)}</span>`;plain+=" "+a;}
+  }
+  return {html,plain,changed,words};
+}
+
+/* ================= UI ================= */
+const $=id=>document.getElementById(id);
+const inp=$("in"),out=$("out"),intensity=$("intensity");
+let last={plain:""};
+
+function renderModes(){
+  $("modes").innerHTML=Object.entries(MODES).map(([k,m])=>`<button class="mode ${k===mode?"active":""}" data-m="${k}">${m.name}</button>`).join("");
+  $("outLabel").textContent=MODES[mode].label;
+  $("dict").innerHTML=Object.entries(MODES[mode].dict).sort().map(([a,b])=>`<div><b>${esc(a)}</b> → ${esc(b)}</div>`).join("");
+}
+$("modes").onclick=e=>{const b=e.target.closest(".mode");if(!b)return;mode=b.dataset.m;localStorage.setItem("gz2_mode",mode);renderModes();run(true);};
+
+function run(bump){
+  const text=inp.value;
+  $("inCount").textContent=(text.trim()?text.trim().split(/\s+/).length:0)+" words";
+  if(!text.trim()){out.innerHTML="";$("outCount").textContent="0 changes";$("sWords").textContent=0;$("sPct").textContent="0%";return;}
+  last=translate(text);
+  out.innerHTML=last.html;
+  $("outCount").textContent=last.changed+" changes";
+  $("sWords").textContent=last.words;
+  $("sPct").textContent=Math.round(100*last.changed/Math.max(1,last.words))+"%";
+  if(bump){out.classList.remove("shake");void out.offsetWidth;out.classList.add("shake");}
+}
+let deb;inp.addEventListener("input",()=>{clearTimeout(deb);deb=setTimeout(()=>run(false),120);});
+
+function countUp(){const n=+(localStorage.getItem("gz2_total")||0)+1;localStorage.setItem("gz2_total",n);$("sTotal").textContent=n;}
+$("goBtn").onclick=()=>{if(!inp.value.trim()){toast("Type somethin' first, playa 🙃");return;}seed++;run(true);countUp();};
+$("rerollBtn").onclick=()=>{seed=Math.floor(Math.random()*1e6);run(true);countUp();};
+
+intensity.oninput=()=>{$("heat").textContent=LEVELS[+intensity.value].n;localStorage.setItem("gz2_lvl",intensity.value);run(false);};
+
+const SAMPLES=[
+  "Hello friends, I need to reset my password before the meeting tomorrow.",
+  "My computer is showing an error again. Can you please help me fix it?",
+  "Thanks for the coffee. I think this is going to be a really good day.",
+  "The boss said we have a problem with the ticket queue. Let's talk later.",
+  "I love my house, my car, and my little dog. Life is good!",
+  "Sorry, I am very busy today. Can we discuss this tomorrow?",
+  "Hey guys, where is the party tonight? I want food and drinks.",
+  "Is anyone else having issues with email? Mine keeps crashing."
+];
+$("sampleBtn").onclick=()=>{inp.value=SAMPLES[Math.floor(Math.random()*SAMPLES.length)];run(true);};
+$("luckyBtn").onclick=()=>{
+  const keys=Object.keys(MODES);mode=keys[Math.floor(Math.random()*keys.length)];
+  intensity.value=4;$("heat").textContent=LEVELS[4].n;
+  if(!inp.value.trim()) inp.value=SAMPLES[Math.floor(Math.random()*SAMPLES.length)];
+  seed=Math.floor(Math.random()*1e6);renderModes();run(true);countUp();
+  toast("🎰 Feelin' shizzle: "+MODES[mode].name);
+};
+$("clearBtn").onclick=()=>{inp.value="";run(false);inp.focus();};
+$("pasteBtn").onclick=async()=>{try{inp.value=await navigator.clipboard.readText();run(true);}catch{toast("Clipboard said naw 🙅");}};
+$("copyBtn").onclick=async()=>{if(!last.plain)return toast("Nothin' to copy, dawg");try{await navigator.clipboard.writeText(last.plain);toast("Copied, fo' shizzle 📋");}catch{toast("Copy failed 😬");}};
+$("speakBtn").onclick=()=>{
+  if(!last.plain)return toast("Nothin' to say!");
+  if(!("speechSynthesis" in window))return toast("Yo browser can't talk 🤐");
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(last.plain);u.rate=MODES[mode].speechRate;u.pitch=mode==="uwu"?1.6:mode==="pirate"?0.7:1;speechSynthesis.speak(u);
+};
+$("shareBtn").onclick=async()=>{
+  if(!last.plain)return toast("Nothin' to share!");
+  if(navigator.share){try{await navigator.share({title:"Gizoogle 2",text:last.plain});}catch{}}
+  else{navigator.clipboard.writeText(last.plain);toast("Copied — go share it, playa");}
+};
+
+/* history */
+function getHist(){try{return JSON.parse(localStorage.getItem("gz2_hist")||"[]");}catch{return[];}}
+function renderHist(){
+  const h=getHist();
+  $("hist").innerHTML=h.length?h.map((x,i)=>`<div class="hist-item" data-i="${i}">${esc(x.out)}<small>${esc(MODES[x.mode]?.name||"")} · "${esc(x.in.slice(0,60))}${x.in.length>60?"…":""}" · tap to load</small></div>`).join("")+`<button class="tbtn" id="clrHist">🗑️ Clear saved</button>`:`<p style="color:var(--muted)">Nothin' saved yet. Hit ⭐ Save on a banger.</p>`;
+  const c=$("clrHist");if(c)c.onclick=e=>{e.stopPropagation();localStorage.removeItem("gz2_hist");renderHist();};
+}
+$("saveBtn").onclick=()=>{
+  if(!last.plain)return toast("Nothin' to save!");
+  const h=getHist();h.unshift({in:inp.value,out:last.plain,mode});localStorage.setItem("gz2_hist",JSON.stringify(h.slice(0,30)));renderHist();toast("Saved to tha vault ⭐");
+};
+$("hist").onclick=e=>{const it=e.target.closest(".hist-item");if(!it)return;const x=getHist()[+it.dataset.i];inp.value=x.in;mode=x.mode;renderModes();run(true);window.scrollTo({top:0,behavior:"smooth"});};
+
+/* dark mode */
+function setDark(on){document.body.classList.toggle("dark",on);$("darkBtn").textContent=on?"☀️ Light Mizzle":"🌙 Dark Mizzle";localStorage.setItem("gz2_dark",on?"1":"0");document.querySelector('meta[name=theme-color]').content=on?"#16161a":"#ffffff";}
+$("darkBtn").onclick=()=>setDark(!document.body.classList.contains("dark"));
+
+/* logo easter egg */
+const TAGS=["Tha Tranzizzle Machizzle — now wit' 200% mo' nonsense","Makin' yo words worse since right now","Sequel nobody asked fo', everybody needed","Professional communication's worst nightmare","Powered by 0 AI braincells an' 1 dictionizzle"];
+let ti=0;$("logo").onclick=()=>{ti=(ti+1)%TAGS.length;$("tagline").textContent=TAGS[ti];};
+
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800);}
+
+/* keyboard: Ctrl/Cmd+Enter */
+inp.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){$("goBtn").click();}});
+
+/* init */
+intensity.value=localStorage.getItem("gz2_lvl")||2;
+$("heat").textContent=LEVELS[+intensity.value].n;
+$("sTotal").textContent=localStorage.getItem("gz2_total")||0;
+setDark(localStorage.getItem("gz2_dark")==="1");
+renderModes();renderHist();
+
+/* ===== PWA: offline + orientation ===== */
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
+try{if(screen.orientation&&screen.orientation.lock){screen.orientation.lock("portrait").catch(()=>{});}}catch(e){}
+</script>
+</body>
+</html>
